@@ -3,7 +3,9 @@ syntax = "proto3";
 package example.grpc.hello;
 option java_package = "example.armeria.grpc";
 
+// docstring for HelloService
 service HelloService {
+  // docstring for HelloService.Hello
   rpc Hello (HelloRequest) returns (HelloReply) {}
   rpc LazyHello (HelloRequest) returns (HelloReply) {}
   rpc BlockingHello (HelloRequest) returns (HelloReply) {}
@@ -12,10 +14,12 @@ service HelloService {
   rpc BidiHello (stream HelloRequest) returns (stream HelloReply) {}
 }
 
+// docstring for HelloRequest
 message HelloRequest {
   string name = 1;
 }
 
+// docstring for HelloReply
 message HelloReply {
   string message = 1;
 }

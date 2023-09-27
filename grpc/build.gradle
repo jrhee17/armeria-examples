@@ -17,6 +17,17 @@ repositories {
     mavenCentral()
 }
 
+def genSrcDir = "${projectDir}/gen-src/main/resources"
+
+sourceSets {
+    main {
+        resources {
+            srcDirs "src/main/resources", genSrcDir
+        }
+    }
+}
+tasks.processResources.duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
 dependencyManagement {
     imports {
         mavenBom 'io.micrometer:micrometer-bom:1.11.1'
@@ -45,6 +56,14 @@ protobuf {
     generateProtoTasks {
         ofSourceSet('main')*.plugins {
             grpc {}
+        }
+        all().each { task ->
+            task.generateDescriptorSet = true
+            task.descriptorSetOptions.includeSourceInfo = true
+            task.descriptorSetOptions.includeImports = true
+            task.descriptorSetOptions.path =
+                    "gen-src/${task.sourceSet.name}/resources/" +
+                            "META-INF/armeria/grpc/my-service.dsc"
         }
     }
 }
